@@ -23,7 +23,7 @@ export default defineEventHandler(async (event) => {
       const [newPoll] = await tx
         .insert(polls)
         .values({
-          creatorId: user.id, // 나중엔 인증 토큰에서 빼오는 걸로 수정해야 함
+          creatorId: user.id,
           title: body.title,
           description: body.description,
           isAnonymous: body.isAnonymous,
@@ -42,6 +42,7 @@ export default defineEventHandler(async (event) => {
         const optionsToInsert = body.options.map((opt: string) => ({
           pollId: newPoll.id,
           value: opt,
+          createdBy: user.id,
         }));
         await tx.insert(pollOptions).values(optionsToInsert);
       }
@@ -50,7 +51,12 @@ export default defineEventHandler(async (event) => {
     });
 
     return { success: true, poll: result };
-  } catch {
-    throw createError({ statusCode: 500, statusMessage: '투표 생성 실패' });
+  } catch (e) {
+    console.error(e);
+    throw createError({
+      statusCode: 500,
+      statusMessage: 'Internal Server Error',
+      message: '투표 생성 실패',
+    });
   }
 });

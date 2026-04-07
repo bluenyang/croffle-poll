@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { ref } from 'vue';
+  import type { PollOption } from '~/types/polls';
 
   interface OptionEditorProps {
     type: 'TEXT' | 'DATE';
@@ -8,13 +8,23 @@
   defineProps<OptionEditorProps>();
 
   // 옵션 목록 상태 관리
-  const options = ref([
-    {
-      text: '', // TEXT 타입일 때 사용할 값
-      date: null, // DATE 타입일 때 사용할 날짜 값
-      time: null, // DATE 타입일 때 사용할 시간 값
-    },
-  ]);
+  const options = defineModel<PollOption[]>({
+    default: () => [
+      {
+        text: '',
+        date: null,
+        time: null,
+      },
+    ],
+  });
+
+  function addOption() {
+    options.value.push({
+      text: '',
+      date: null,
+      time: null,
+    });
+  }
 </script>
 
 <template>
@@ -31,12 +41,7 @@
         <h3 class="text-base font-bold text-cyan-400">Poll Options</h3>
 
         <!-- Add Option Button -->
-        <UButton
-          variant="ghost"
-          class="text-secondary"
-          size="sm"
-          @click="options.push({ text: '', date: null, time: null })"
-        >
+        <UButton variant="ghost" class="text-secondary" size="sm" @click="addOption">
           <UIcon name="i-lucide-circle-plus" class="size-4" />
           <span>Add Option</span>
         </UButton>

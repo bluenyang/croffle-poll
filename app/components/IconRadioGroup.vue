@@ -1,6 +1,6 @@
 <script setup lang="ts">
-  // 옵션 타입 선택을 위한 상태 관리
-  const selectedOptionType = ref<'TEXT' | 'DATE'>('TEXT');
+  const modelValue = defineModel<'TEXT' | 'DATE'>({ default: 'TEXT' });
+
   // 옵션 타입 라디오 그룹 아이템 정의
   const optionTypeItems = [
     {
@@ -34,7 +34,7 @@
     >
       <!-- 라디오 그룹 -->
       <URadioGroup
-        v-model="selectedOptionType"
+        v-model="modelValue"
         indicator="start"
         variant="card"
         :items="optionTypeItems"
@@ -49,14 +49,14 @@
         <template #label="{ item }">
           <div
             class="flex flex-col items-start gap-2"
-            :class="selectedOptionType === item.value ? '[]' : ''"
+            :class="modelValue === item.value ? '[]' : ''"
           >
             <!-- 아이콘 -->
             <div class="flex rounded-lg bg-white/20 p-2">
               <UIcon
                 :name="item.icon"
                 class="size-8"
-                :class="selectedOptionType === item.value ? 'bg-primary' : ''"
+                :class="modelValue === item.value ? 'bg-primary' : ''"
               />
             </div>
             <!-- 라벨 텍스트 -->
@@ -67,6 +67,4 @@
       </URadioGroup>
     </UFormField>
   </UCard>
-  <!-- 옵션 편집기. 선택된 옵션 타입에 따라 동적으로 렌더링 -->
-  <OptionEditor :type="selectedOptionType" />
 </template>
