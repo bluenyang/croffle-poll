@@ -6,7 +6,6 @@
       label: 'Home',
       icon: 'i-lucide-house',
       to: '/',
-      active: true,
     },
     {
       label: 'Active Votes',
