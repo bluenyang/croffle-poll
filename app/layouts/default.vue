@@ -1,6 +1,9 @@
 <script setup lang="ts">
   import type { NavigationMenuItem } from '@nuxt/ui';
 
+  const { clear } = useUserSession();
+  const toast = useToast();
+
   // aside 네비게이션 메뉴 아이템 정의
   const navItems: NavigationMenuItem[] = [
     {
@@ -38,6 +41,29 @@
       target: '_blank',
     },
   ];
+
+  async function onLogout() {
+    try {
+      // 세션 삭제 및 프론트 상태 초기화
+      await clear();
+
+      toast.add({
+        title: 'Logout Success',
+        description: 'You have been logged out successfully.',
+        type: 'foreground',
+      });
+
+      // 로그아웃 후 로그인 페이지로 이동
+      await navigateTo('/login');
+    } catch {
+      toast.add({
+        title: 'Logout Failed',
+        description: 'Failed to logout',
+        type: 'foreground',
+        color: 'error',
+      });
+    }
+  }
 </script>
 
 <template>
@@ -108,17 +134,29 @@
           </NuxtLink>
         </template>
         <template #right>
-          <!-- GitHub Link -->
-          <UTooltip text="Go to GitHub">
-            <UButton
-              color="neutral"
-              variant="ghost"
-              to="https://github.com/team-croffle/croffle-poll/releases"
-              target="_blank"
-              icon="i-simple-icons-github"
-              aria-label="GitHub"
-            />
-          </UTooltip>
+          <div class="flex flex-row items-center gap-2">
+            <!-- GitHub Link -->
+            <UTooltip text="Go to GitHub">
+              <UButton
+                color="neutral"
+                variant="ghost"
+                to="https://github.com/team-croffle/croffle-poll/releases"
+                target="_blank"
+                icon="i-simple-icons-github"
+                aria-label="GitHub"
+              />
+            </UTooltip>
+            <!-- Logout Button -->
+            <UTooltip text="Logout">
+              <UButton
+                color="neutral"
+                variant="ghost"
+                icon="i-lucide-log-out"
+                aria-label="Logout"
+                @click="onLogout"
+              />
+            </UTooltip>
+          </div>
         </template>
       </UHeader>
       <div class="mx-8 mt-4 max-w-[90%] grow flex-col gap-4">
