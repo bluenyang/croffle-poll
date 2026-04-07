@@ -14,12 +14,15 @@
     createdAt: string;
   };
 
+  // 컴포넌트 레퍼런스 - Table에서 사용
   const UButton = resolveComponent('UButton');
   const UBadge = resolveComponent('UBadge');
   const UDropdownMenu = resolveComponent('UDropdownMenu');
 
+  // 라우터
   const router = useRouter();
 
+  // 테이블 컬럼 정의
   const columns: TableColumn<Poll>[] = [
     {
       accessorKey: 'id',
@@ -121,13 +124,14 @@
       },
       header: 'Action',
       cell: ({ row }) => {
+        // 향후에 다른 Action 추가를 상정하여 DropdownMenu로 구현. 현재는 투표를 하러 가는 액션 하나만 존재
         const items = [
           {
             type: 'label',
             label: 'Actions',
           },
           {
-            label: 'Go to details',
+            label: 'Vote',
             onSelect() {
               router.push(`/polls/${row.original.id}`);
             },
@@ -155,11 +159,14 @@
     },
   ];
 
+  // API에서 활성화된 투표 목록을 가져오는 fetcher.
+  // useFetch === Nuxt의 Composition API
   const { data: polls, pending } = useFetch<Poll[]>('/api/polls/active', {
-    lazy: true, // 이게 핵심! 페이지 이동을 막지 않고 백그라운드에서 fetch함
-    default: () => [], // fetch가 완료되기 전까지 들어있을 기본값 (빈 배열)
+    lazy: true,
+    default: () => [], // fetch가 완료되기 전까지 들어있을 기본값
   });
 
+  // 테이블 레퍼런스. 필터링된 행의 개수를 보여주는 데 사용
   const table = useTemplateRef('table');
 </script>
 

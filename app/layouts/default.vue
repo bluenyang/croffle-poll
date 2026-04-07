@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import type { NavigationMenuItem } from '@nuxt/ui';
 
+  // aside 네비게이션 메뉴 아이템 정의
   const navItems: NavigationMenuItem[] = [
     {
       label: 'Home',
@@ -24,6 +25,7 @@
     },
   ];
 
+  // footer 네비게이션 메뉴 아이템 정의
   const footerItems: NavigationMenuItem[] = [
     {
       label: 'BlueNyang',
@@ -39,9 +41,10 @@
 </script>
 
 <template>
+  <!-- Main Layout -->
   <div :class="{ dark: true }" class="flex h-screen flex-row">
     <USidebar
-      class="border-default flex h-full flex-col border-r"
+      class="border-default flex h-full shrink-0 flex-col border-r"
       collapsible="none"
       side="left"
       variant="sidebar"
@@ -49,16 +52,20 @@
         container: 'flex h-full flex-col',
       }"
     >
+      <!-- Sidebar Header -->
       <template #header>
         <div class="flex flex-row items-center justify-center gap-2 py-4">
-          <img src="/logo.png" alt="main logo" class="size-12" />
+          <!-- Logo -->
+          <img src="/logo.png" alt="main logo" class="size-12 select-none" />
+          <!-- Brand Name -->
           <div class="flex flex-col">
-            <span class="text-xl font-bold">Croffle Dev.</span>
-            <span class="text-muted text-sm">Development Team</span>
+            <span class="cursor-default text-xl font-bold select-none">Croffle Dev.</span>
+            <span class="text-muted cursor-default text-sm select-none">Development Team</span>
           </div>
         </div>
       </template>
       <template #default>
+        <!-- Navigation Menu -->
         <UNavigationMenu
           orientation="vertical"
           :items="navItems"
@@ -68,6 +75,7 @@
         />
       </template>
       <template #footer>
+        <!-- Create Poll Button -->
         <NuxtLink
           to="/poll/new"
           class="focus:ring-primary mb-16 w-full rounded-lg focus:ring-2 focus:ring-offset-2 focus:outline-none"
@@ -81,13 +89,17 @@
         </NuxtLink>
       </template>
     </USidebar>
+    <!-- Main Content -->
     <div class="flex grow flex-col overflow-y-auto">
+      <!-- Main Content Header -->
       <UHeader
+        class="py-4"
         :ui="{
           container: 'mx-8 max-w-[90%]',
         }"
       >
         <template #title>
+          <!-- Title Link -->
           <NuxtLink to="/" class="flex flex-row items-center gap-2 focus:outline-none">
             <p class="text-2xl font-bold">
               <span>Croffle Dev. </span>
@@ -96,7 +108,8 @@
           </NuxtLink>
         </template>
         <template #right>
-          <UTooltip text="Go to GitHub" :kbds="['meta', 'G']">
+          <!-- GitHub Link -->
+          <UTooltip text="Go to GitHub">
             <UButton
               color="neutral"
               variant="ghost"
@@ -108,7 +121,9 @@
           </UTooltip>
         </template>
       </UHeader>
-      <slot />
+      <div class="mx-8 mt-4 max-w-[90%] grow flex-col gap-4">
+        <slot />
+      </div>
       <UFooter>
         <template #left>
           <p class="text-muted text-sm">
