@@ -8,6 +8,7 @@ export default defineEventHandler(async (_) => {
     .select()
     .from(votes)
     .innerJoin(users, eq(votes.creatorId, users.id))
+    .where(eq(votes.isClosed, true))
     .orderBy(desc(votes.createdAt));
 
   const formattedPolls = allPolls.map((poll) => ({
