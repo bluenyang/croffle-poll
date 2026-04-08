@@ -133,7 +133,7 @@
           {
             label: 'Vote',
             onSelect() {
-              router.push(`/polls/${row.original.id}`);
+              router.push(`/poll/${row.original.id}`);
             },
           },
         ];

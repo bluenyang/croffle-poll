@@ -39,9 +39,9 @@ export default defineEventHandler(async (event) => {
 
       // 투표 항목 인서트 (옵션이 배열로 들어왔을 경우)
       if (body.options && body.options.length > 0) {
-        const optionsToInsert = body.options.map((opt: string) => ({
+        const optionsToInsert = body.options.map(({ value }: { value: string }) => ({
           pollId: newPoll.id,
-          value: opt,
+          value,
           createdBy: user.id,
         }));
         await tx.insert(pollOptions).values(optionsToInsert);

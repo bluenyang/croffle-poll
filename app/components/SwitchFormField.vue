@@ -1,4 +1,6 @@
 <script setup lang="ts">
+  const modelValue = defineModel<boolean>();
+
   interface SwitchFormFieldProps {
     label: string;
     description: string;
@@ -23,6 +25,7 @@
       }"
     >
       <USwitch
+        v-model="modelValue"
         :label="label"
         :description="description"
         :ui="{
