@@ -16,3 +16,33 @@ export interface PollCreationState {
   optionType: 'TEXT' | 'DATE';
   options: PollOption[];
 }
+
+export interface PollOptionData {
+  id: number;
+  pollId: number;
+  creatorName: string;
+  value: string;
+}
+
+export interface PollResponseData {
+  id: number;
+  pollId: number;
+  optionId: number;
+  votedUserName: string;
+  createdAt: Date;
+}
+
+export type PollData = {
+  id: number;
+  title: string;
+  description: string | null;
+  createdAt: Date;
+  creatorName: string;
+  isAnonymous: boolean;
+  isMultipleChoice: boolean;
+  allowCustomOptions: boolean;
+  optionType: string;
+  isClosed: boolean;
+  options: PollOptionData[];
+  responses: PollResponseData[];
+};
