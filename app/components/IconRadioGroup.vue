@@ -5,15 +5,13 @@
   const optionTypeItems = [
     {
       label: 'Text Selection',
-      description:
-        'Voters can choose from a list of text options for various types of polls, such as single-choice or multiple-choice questions.',
+      description: '텍스트로 이루어진 선택지를 나열하는 방식. 가장 일반적인 투표 방식입니다.',
       value: 'TEXT',
       icon: 'i-lucide-circle-dot',
     },
     {
       label: 'Timeline Selection',
-      description:
-        'Voters can select a specific date and time from a list of options or a calendar interface, ideal for scheduling events or meetings.',
+      description: '아직 개발 중입니다 (사용 금지)',
       value: 'DATE',
       icon: 'i-lucide-chart-gantt',
     },
