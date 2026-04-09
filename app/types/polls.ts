@@ -24,12 +24,11 @@ export interface PollOptionData {
   value: string;
 }
 
-export interface PollResponseData {
-  id: number;
-  pollId: number;
-  optionId: number;
-  votedUserName: string;
-  createdAt: Date;
+export interface PollVotesData {
+  value: string;
+  count: number;
+  voters: string[];
+  rank: number;
 }
 
 export type PollData = {
@@ -44,5 +43,19 @@ export type PollData = {
   optionType: string;
   isClosed: boolean;
   options: PollOptionData[];
-  responses: PollResponseData[];
+};
+
+export type PollResultData = {
+  id: string;
+  title: string;
+  description: string;
+  createdAt: Date;
+  creatorName: string;
+  isAnonymous: boolean;
+  isMultipleChoice: boolean;
+  allowCustomOptions: boolean;
+  optionType: string;
+  isClosed: boolean;
+  totalVotes: number;
+  votes: PollVotesData[];
 };

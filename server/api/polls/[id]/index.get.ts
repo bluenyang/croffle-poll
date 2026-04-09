@@ -1,5 +1,5 @@
 import { db } from '~~/server/utils/db';
-import { polls, pollOptions, pollResponses } from '~~/server/utils/schema';
+import { polls, pollOptions } from '~~/server/utils/schema';
 import { eq } from 'drizzle-orm';
 
 export default defineEventHandler(async (event) => {
@@ -43,24 +43,8 @@ export default defineEventHandler(async (event) => {
     value: option.poll_options.value,
   }));
 
-  const responses = await db
-    .select()
-    .from(pollResponses)
-    .innerJoin(users, eq(pollResponses.userId, users.id))
-    .where(eq(pollResponses.pollId, pollId));
-
-  // 무기명 투표 데이터 마스킹
-  const formattedResp = responses.map((res) => ({
-    id: res.poll_responses.id,
-    pollId: res.poll_responses.pollId,
-    optionId: res.poll_responses.optionId,
-    votedUserName: poll.polls.isAnonymous ? '익명' : res.users.name,
-    createdAt: res.poll_responses.createdAt,
-  }));
-
   return {
     ...formattedPoll,
     options: formattedOptions,
-    responses: formattedResp,
   };
 });
