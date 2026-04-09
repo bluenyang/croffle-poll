@@ -69,7 +69,7 @@ export default defineEventHandler(async (event) => {
     if (index > 0) {
       const prevResp = sortedResponses[index - 1];
       if (!prevResp) throw new Error('이전 응답을 찾을 수 없습니다.');
-      if (prevResp.count < resp.count) {
+      if (prevResp.count > resp.count) {
         currentRank = index + 1;
       }
     }
