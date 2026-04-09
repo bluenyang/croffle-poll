@@ -37,74 +37,104 @@
       enableSorting: true,
     },
     {
-      accessorKey: 'description',
-      header: 'Description',
-      cell: ({ row }) => row.getValue('description'),
-      enableSorting: false,
-    },
-    {
       accessorKey: 'creatorName',
+      meta: {
+        class: {
+          th: 'text-center',
+          td: 'text-center',
+        },
+      },
       header: 'Creator Name',
       cell: ({ row }) => row.getValue('creatorName'),
       enableSorting: true,
     },
     {
       accessorKey: 'isAnonymous',
+      meta: {
+        class: {
+          th: 'text-center',
+          td: 'text-center',
+        },
+      },
       header: 'isAnonymous',
       cell: ({ row }) => {
         const isAnonymous = row.getValue('isAnonymous');
         if (isAnonymous) {
-          return h(UBadge, { color: 'neutral', variant: 'subtle' }, () => 'Yes');
+          return h(UBadge, { color: 'success', variant: 'subtle' }, () => 'Yes');
         }
-        return h(UBadge, { color: 'success', variant: 'subtle' }, () => 'No');
+        return h(UBadge, { color: 'warning', variant: 'subtle' }, () => 'No');
       },
       enableSorting: false,
     },
     {
       accessorKey: 'isMultipleChoice',
+      meta: {
+        class: {
+          th: 'text-center',
+          td: 'text-center',
+        },
+      },
       header: 'isMultipleChoice',
       cell: ({ row }) => {
         const isMultipleChoice = row.getValue('isMultipleChoice');
         if (isMultipleChoice) {
-          return h(UBadge, { color: 'neutral', variant: 'subtle' }, () => 'Yes');
+          return h(UBadge, { color: 'success', variant: 'subtle' }, () => 'Yes');
         }
-        return h(UBadge, { color: 'success', variant: 'subtle' }, () => 'No');
+        return h(UBadge, { color: 'warning', variant: 'subtle' }, () => 'No');
       },
       enableSorting: false,
     },
     {
       accessorKey: 'allowCustomOptions',
+      meta: {
+        class: {
+          th: 'text-center',
+          td: 'text-center',
+        },
+      },
       header: 'allowCustomOptions',
       cell: ({ row }) => {
         const allowCustomOptions = row.getValue('allowCustomOptions');
         if (allowCustomOptions) {
-          return h(UBadge, { color: 'neutral', variant: 'subtle' }, () => 'Yes');
+          return h(UBadge, { color: 'success', variant: 'subtle' }, () => 'Yes');
         }
-        return h(UBadge, { color: 'success', variant: 'subtle' }, () => 'No');
+        return h(UBadge, { color: 'warning', variant: 'subtle' }, () => 'No');
       },
       enableSorting: false,
     },
     {
       accessorKey: 'optionType',
+      meta: {
+        class: {
+          th: 'text-center',
+          td: 'text-center',
+        },
+      },
       header: 'optionType',
       cell: ({ row }) => {
         const optionType = row.getValue('optionType');
         if (optionType === 'TEXT') {
-          return h(UBadge, { color: 'neutral', variant: 'subtle' }, () => 'TEXT');
+          return h(UBadge, { color: 'success', variant: 'subtle' }, () => 'TEXT');
         }
-        return h(UBadge, { color: 'success', variant: 'subtle' }, () => 'DATE');
+        return h(UBadge, { color: 'info', variant: 'subtle' }, () => 'DATE');
       },
       enableSorting: true,
     },
     {
       accessorKey: 'isClosed',
+      meta: {
+        class: {
+          th: 'text-center',
+          td: 'text-center',
+        },
+      },
       header: 'isClosed',
       cell: ({ row }) => {
         const isClosed = row.getValue('isClosed');
         if (isClosed) {
-          return h(UBadge, { color: 'neutral', variant: 'subtle' }, () => 'Yes');
+          return h(UBadge, { color: 'success', variant: 'subtle' }, () => 'Yes');
         }
-        return h(UBadge, { color: 'success', variant: 'subtle' }, () => 'No');
+        return h(UBadge, { color: 'warning', variant: 'subtle' }, () => 'No');
       },
       enableSorting: false,
     },
@@ -119,7 +149,8 @@
       enableHiding: false,
       meta: {
         class: {
-          td: 'text-right',
+          th: 'text-center',
+          td: 'text-center',
         },
       },
       header: 'Action',
@@ -133,7 +164,13 @@
           {
             label: 'Vote',
             onSelect() {
-              router.push(`/poll/${row.original.id}`);
+              router.push(`/poll/${row.original.id}/vote`);
+            },
+          },
+          {
+            label: 'View Results',
+            onSelect() {
+              router.push(`/poll/${row.original.id}/results`);
             },
           },
         ];
@@ -151,6 +188,7 @@
             h(UButton, {
               icon: 'i-lucide-arrow-right',
               color: 'neutral',
+              class: 'text-muted',
               variant: 'ghost',
               'aria-label': 'Actions dropdown',
             })
