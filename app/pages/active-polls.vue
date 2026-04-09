@@ -212,13 +212,7 @@
   <div class="flex h-full flex-col items-center">
     <div class="divide-accented w-full flex-1 divide-y">
       <div class="flex items-center gap-2 overflow-x-auto px-4 py-3.5">
-        <UInput
-          :model-value="(table?.tableApi?.getColumn('email')?.getFilterValue() as string)"
-          class="max-w-sm min-w-[12ch]"
-          placeholder="필터링 개발 중..."
-          disabled
-          @update:model-value="table?.tableApi?.getColumn('email')?.setFilterValue($event)"
-        />
+        <UInput class="max-w-sm min-w-[12ch]" placeholder="필터링 개발 중..." disabled />
       </div>
 
       <UTable ref="table" :data="polls" :columns="columns" :loading="pending" sticky class="h-96">
