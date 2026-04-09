@@ -126,12 +126,12 @@
       >
         <template #title>
           <!-- Title Link -->
-          <NuxtLink to="/" class="flex flex-row items-center gap-2 focus:outline-none">
+          <div class="flex flex-row items-center gap-2 focus:outline-none">
             <p class="text-2xl font-bold">
               <span>Croffle Dev. </span>
               <span class="text-primary">Poll Platform</span>
             </p>
-          </NuxtLink>
+          </div>
         </template>
         <template #right>
           <div class="flex flex-row items-center gap-2">
