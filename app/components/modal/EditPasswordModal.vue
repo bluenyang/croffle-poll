@@ -31,23 +31,13 @@
       return;
     }
 
-    if (!user.value?.id) {
-      toast.add({
-        title: 'Error',
-        description: 'User not found',
-        type: 'foreground',
-        color: 'error',
-      });
-      return;
-    }
-
     pending.value = true;
     try {
       await $fetch(fetchUrl, {
         method: 'PATCH',
         body: {
           newPassword: newPassword.value,
-          userId: user.value?.id,
+          userId: user.value?.id ?? null,
         },
       });
 

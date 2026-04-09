@@ -15,6 +15,11 @@ export default defineEventHandler(async (event) => {
   if (user.role !== 'ADMIN') throw createError({ statusCode: 403 });
 
   const { newPassword, userId } = await readBody(event);
+  let targetUserId: number | null = userId;
+  if (!targetUserId) {
+    targetUserId = user.id;
+  }
+
   const hashedNewPass = await hashPassword(newPassword);
 
   await db

@@ -1,8 +1,11 @@
 <script setup lang="ts">
-  import type { NavigationMenuItem } from '@nuxt/ui';
+  import type { DropdownMenuItem, NavigationMenuItem } from '@nuxt/ui';
+  import EditPasswordModal from '~/components/modal/EditPasswordModal.vue';
 
   const { clear } = useUserSession();
   const toast = useToast();
+
+  const isChangePasswordModalOpen = ref<boolean>(false);
 
   // aside 네비게이션 메뉴 아이템 정의
   const navItems: NavigationMenuItem[] = [
@@ -25,6 +28,19 @@
       label: 'Team',
       icon: 'i-lucide-users',
       to: '/team',
+    },
+  ];
+
+  const profileItems: DropdownMenuItem[] = [
+    {
+      type: 'label',
+      label: 'Profile Actions',
+    },
+    {
+      label: 'Change Password',
+      onSelect() {
+        isChangePasswordModalOpen.value = true;
+      },
     },
   ];
 
@@ -75,7 +91,7 @@
       side="left"
       variant="sidebar"
       :ui="{
-        container: 'flex h-full flex-col',
+        container: 'flex h-full flex-col text-muted',
       }"
     >
       <!-- Sidebar Header -->
@@ -146,6 +162,23 @@
                 aria-label="GitHub"
               />
             </UTooltip>
+
+            <UTooltip text="profile">
+              <UDropdownMenu
+                :items="profileItems"
+                :content="{
+                  align: 'start',
+                  side: 'bottom',
+                  sideOffset: 8,
+                }"
+                :ui="{
+                  content: 'w-48',
+                }"
+              >
+                <UButton icon="i-lucide-user" color="neutral" variant="ghost" />
+              </UDropdownMenu>
+            </UTooltip>
+
             <!-- Logout Button -->
             <UTooltip text="Logout">
               <UButton
@@ -183,5 +216,6 @@
         </template>
       </UFooter>
     </div>
+    <EditPasswordModal v-model:open="isChangePasswordModalOpen" :fetch-url="`/api/auth/password`" />
   </div>
 </template>

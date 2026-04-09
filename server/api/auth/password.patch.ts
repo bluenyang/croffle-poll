@@ -18,7 +18,12 @@ export default defineEventHandler(async (event) => {
   const { newPassword } = await readBody(event);
   const hashedPassword = await hashPassword(newPassword);
 
-  await db.update(users).set({ passwordHash: hashedPassword }).where(eq(users.id, user.id));
+  await db
+    .update(users)
+    .set({
+      passwordHash: hashedPassword,
+    })
+    .where(eq(users.id, user.id));
 
   return { success: true };
 });
