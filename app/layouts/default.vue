@@ -136,6 +136,8 @@
       <!-- Main Content Header -->
       <UHeader
         class="py-4"
+        mode="slideover"
+        toggle-side="left"
         :ui="{
           container: 'mx-8 max-w-[90%]',
         }"
@@ -190,6 +192,10 @@
               />
             </UTooltip>
           </div>
+        </template>
+
+        <template #body>
+          <UNavigationMenu :items="navItems" orientation="vertical" class="-mx-2.5" />
         </template>
       </UHeader>
       <div class="mx-8 mt-4 max-w-[90%] grow flex-col gap-4">
