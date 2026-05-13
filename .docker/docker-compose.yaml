@@ -1,0 +1,31 @@
+services:
+  db:
+    container_name: croffle-poll-db
+    image: postgres:16-alpine
+    restart: always
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER:postgres}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:postgres}
+      - POSTGRES_DB=${POSTGRES_DB:postgres}
+    ports:
+      - '5432:5432'
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+
+  app:
+    container_name: croffle-poll-app
+    build: .
+    restart: always
+    ports:
+      - '3000:3000'
+    environment:
+      - DATABASE_URL=${DATABASE_URL}
+      - NUXT_SESSION_PASSWORD=${NUXT_SESSION_PASSWORD}
+      - ADMIN_USERNAME=${ADMIN_USERNAME:admin}
+      - ADMIN_PASSWORD=${ADMIN_PASSWORD:admin}
+    depends_on:
+      - db
+
+volumes:
+  postgres_data:
