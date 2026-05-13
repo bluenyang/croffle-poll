@@ -1,19 +1,8 @@
 import { eq } from 'drizzle-orm';
+import type { UserDeleteRequestDto } from '~~/shared/dto';
 
 export default defineEventHandler(async (event) => {
-  const session = await getUserSession(event);
-  if (!session.user) throw createError({ statusCode: 401 });
-
-  const user = session.user as {
-    id: number;
-    email: string;
-    name: string;
-    role: 'ADMIN' | 'MEMBER';
-  };
-
-  if (user.role !== 'ADMIN') throw createError({ statusCode: 403 });
-
-  const { userId } = await readBody(event);
+  const { userId } = await readBody<UserDeleteRequestDto>(event);
 
   if (!userId) throw createError({ statusCode: 400, message: 'User ID is required' });
 

@@ -1,23 +1,15 @@
 import { eq } from 'drizzle-orm';
 import { users } from '~~/server/utils/schema';
+import type { UserPasswordChangeRequestDto } from '~~/shared/dto';
 
 export default defineEventHandler(async (event) => {
-  const session = await getUserSession(event);
-  if (!session.user) throw createError({ statusCode: 401 });
+  const { newPassword, userId } = await readBody<UserPasswordChangeRequestDto>(event);
 
-  const user = session.user as {
-    id: number;
-    email: string;
-    name: string;
-    role: 'ADMIN' | 'MEMBER';
-  };
-
-  if (user.role !== 'ADMIN') throw createError({ statusCode: 403 });
-
-  const { newPassword, userId } = await readBody(event);
-  let targetUserId: number | null = userId;
+  let targetUserId: string | null = userId || null;
   if (!targetUserId) {
-    targetUserId = user.id;
+    const session = await getUserSession(event);
+    if (!session.user) throw createError({ statusCode: 401 });
+    targetUserId = session.user.id;
   }
 
   const hashedNewPass = await hashPassword(newPassword);
@@ -27,7 +19,7 @@ export default defineEventHandler(async (event) => {
     .set({
       passwordHash: hashedNewPass,
     })
-    .where(eq(users.id, userId));
+    .where(eq(users.id, targetUserId));
 
   return { success: true };
 });
