@@ -18,7 +18,5 @@ export const pollSubmissions = pgTable(
     textContent: text('text_content'),
     createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
   },
-  (t) => ({
-    unq: unique().on(t.pollId, t.userId),
-  })
+  (t) => [unique('poll_submission_poll_user_unq').on(t.pollId, t.userId)]
 );

@@ -1,18 +1,16 @@
-import { primaryKey, pgTable, uuid } from 'drizzle-orm/pg-core';
-import { pollOptions } from './poll-options';
-import { pollSubmissions } from './poll-submissions';
+import { pgTable, uuid, text, timestamp } from 'drizzle-orm/pg-core';
+import { uuidv7 } from 'uuidv7';
 
-export const pollSubmissionOptions = pgTable(
-  'poll_submission_options',
-  {
-    submissionId: uuid('submission_id')
-      .notNull()
-      .references(() => pollSubmissions.id, { onDelete: 'cascade' }),
-    optionId: uuid('option_id')
-      .notNull()
-      .references(() => pollOptions.id, { onDelete: 'cascade' }),
-  },
-  (t) => ({
-    pk: primaryKey({ columns: [t.submissionId, t.optionId] }),
-  })
-);
+export const pollSubmissionOptions = pgTable('poll_submission_options', {
+  id: uuid('id')
+    .primaryKey()
+    .$defaultFn(() => uuidv7()),
+  pollId: uuid('poll_id')
+    .notNull()
+    .references(() => polls.id, { onDelete: 'cascade' }),
+  content: text('content').notNull(),
+  addedBy: uuid('added_by')
+    .notNull()
+    .references(() => users.id, { onDelete: 'cascade' }),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+});

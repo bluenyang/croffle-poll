@@ -15,8 +15,8 @@ export const polls = pgTable('polls', {
   type: pollTypeEnum('type').notNull(),
   status: pollStatusEnum('status').default('ACTIVE').notNull(),
   isAnonymous: boolean('is_anonymous').default(false).notNull(),
-  allowMultipleChoice: boolean('allow_multiple_choice').default(false),
-  allowAddOptions: boolean('allow_add_options').default(false),
+  isMultipleChoice: boolean('is_multiple_choice').default(false),
+  allowCustomOptions: boolean('allow_custom_options').default(false),
   createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
   closedAt: timestamp('closed_at', { withTimezone: true }),
 });

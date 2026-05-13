@@ -24,7 +24,7 @@ CREATE TABLE IF NOT EXISTS polls (
   status poll_status NOT NULL,
   is_anonymous BOOLEAN DEFAULT FALSE NOT NULL,
   is_multiple_choice BOOLEAN DEFAULT FALSE,
-  allow_custom_options BOOLEA DEFAULT FALSE,
+  allow_custom_options BOOLEAN DEFAULT FALSE,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
   closed_at TIMESTAMP WITH TIME ZONE
 );
