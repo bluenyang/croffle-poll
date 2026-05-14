@@ -15,7 +15,7 @@ export default defineNuxtConfig({
   runtimeConfig: {
     databaseUrl: process.env.DATABASE_URL,
     initAdmin: {
-      username: process.env.INIT_ADMIN_USERNAME,
+      initEmail: process.env.INIT_ADMIN_EMAIL,
       password: process.env.INIT_ADMIN_PASSWORD,
     },
   },

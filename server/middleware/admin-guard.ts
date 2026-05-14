@@ -1,13 +1,16 @@
 import { consola } from 'consola';
 
 export default defineEventHandler(async (event) => {
-  const logger = consola.withTag('admin-guard');
+  if (!event.path.startsWith('/api/')) {
+    return;
+  }
 
   // Check with target paths
   if (!event.path.startsWith('/api/admin')) {
     return;
   }
 
+  const logger = consola.withTag('admin-guard');
   const session = await getUserSession(event);
 
   if (!session.user || session.user.role !== 'ADMIN') {

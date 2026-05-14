@@ -1,6 +1,10 @@
 export default defineEventHandler(async (event) => {
   const session = await getUserSession(event);
 
+  if (!event.path.startsWith('/api/')) {
+    return;
+  }
+
   if (event.method === 'POST' && event.path.startsWith('/api/auth/login')) {
     return;
   }

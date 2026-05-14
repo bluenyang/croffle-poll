@@ -21,9 +21,9 @@ export default defineNitroPlugin(async () => {
     }
 
     const config = useRuntimeConfig();
-    const { username, password } = config.initAdmin;
+    const { initEmail, password } = config.initAdmin;
 
-    if (!username || !password) {
+    if (!initEmail || !password) {
       logger.warn('INIT_ADMIN_USERNAME or INIT_ADMIN_PASSWORD not set. Skipping initialization.');
       return;
     }
@@ -31,7 +31,7 @@ export default defineNitroPlugin(async () => {
     const hashedPassword = await hashPassword(password);
 
     await db.insert(users).values({
-      loginId: username,
+      email: initEmail,
       passwordHash: hashedPassword,
       nickname: 'Admin',
       role: 'ADMIN',
