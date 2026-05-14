@@ -1,228 +1,65 @@
-<script lang="tsx" setup>
-  import type { TableColumn } from '@nuxt/ui';
+<script setup lang="ts">
+  import { format } from 'date-fns';
 
-  type Poll = {
-    id: number;
-    title: string;
-    description: string;
-    creatorName: string; // 투표 생성자 이름
-    isAnonymous: boolean;
-    isMultipleChoice: boolean;
-    allowCustomOptions: boolean;
-    optionType: 'TEXT' | 'DATE';
-    isClosed: boolean;
-    createdAt: string;
-  };
-
-  // 컴포넌트 레퍼런스 - Table에서 사용
-  const UButton = resolveComponent('UButton');
-  const UBadge = resolveComponent('UBadge');
-  const UDropdownMenu = resolveComponent('UDropdownMenu');
-
-  // 라우터
   const router = useRouter();
 
-  // 테이블 컬럼 정의
-  const columns: TableColumn<Poll>[] = [
-    {
-      accessorKey: 'id',
-      header: '#',
-      cell: ({ row }) => `#${row.getValue('id')}`,
-      enableSorting: true,
-    },
-    {
-      accessorKey: 'title',
-      header: 'Title',
-      cell: ({ row }) => row.getValue('title'),
-      enableSorting: true,
-    },
-    {
-      accessorKey: 'creatorName',
-      meta: {
-        class: {
-          th: 'text-center',
-          td: 'text-center',
-        },
-      },
-      header: 'Creator Name',
-      cell: ({ row }) => row.getValue('creatorName'),
-      enableSorting: true,
-    },
-    {
-      accessorKey: 'isAnonymous',
-      meta: {
-        class: {
-          th: 'text-center',
-          td: 'text-center',
-        },
-      },
-      header: 'isAnonymous',
-      cell: ({ row }) => {
-        const isAnonymous = row.getValue('isAnonymous');
-        if (isAnonymous) {
-          return h(UBadge, { color: 'success', variant: 'subtle' }, () => 'Yes');
-        }
-        return h(UBadge, { color: 'warning', variant: 'subtle' }, () => 'No');
-      },
-      enableSorting: false,
-    },
-    {
-      accessorKey: 'isMultipleChoice',
-      meta: {
-        class: {
-          th: 'text-center',
-          td: 'text-center',
-        },
-      },
-      header: 'isMultipleChoice',
-      cell: ({ row }) => {
-        const isMultipleChoice = row.getValue('isMultipleChoice');
-        if (isMultipleChoice) {
-          return h(UBadge, { color: 'success', variant: 'subtle' }, () => 'Yes');
-        }
-        return h(UBadge, { color: 'warning', variant: 'subtle' }, () => 'No');
-      },
-      enableSorting: false,
-    },
-    {
-      accessorKey: 'allowCustomOptions',
-      meta: {
-        class: {
-          th: 'text-center',
-          td: 'text-center',
-        },
-      },
-      header: 'allowCustomOptions',
-      cell: ({ row }) => {
-        const allowCustomOptions = row.getValue('allowCustomOptions');
-        if (allowCustomOptions) {
-          return h(UBadge, { color: 'success', variant: 'subtle' }, () => 'Yes');
-        }
-        return h(UBadge, { color: 'warning', variant: 'subtle' }, () => 'No');
-      },
-      enableSorting: false,
-    },
-    {
-      accessorKey: 'optionType',
-      meta: {
-        class: {
-          th: 'text-center',
-          td: 'text-center',
-        },
-      },
-      header: 'optionType',
-      cell: ({ row }) => {
-        const optionType = row.getValue('optionType');
-        if (optionType === 'TEXT') {
-          return h(UBadge, { color: 'success', variant: 'subtle' }, () => 'TEXT');
-        }
-        return h(UBadge, { color: 'info', variant: 'subtle' }, () => 'DATE');
-      },
-      enableSorting: true,
-    },
-    {
-      accessorKey: 'isClosed',
-      meta: {
-        class: {
-          th: 'text-center',
-          td: 'text-center',
-        },
-      },
-      header: 'isClosed',
-      cell: ({ row }) => {
-        const isClosed = row.getValue('isClosed');
-        if (isClosed) {
-          return h(UBadge, { color: 'success', variant: 'subtle' }, () => 'Yes');
-        }
-        return h(UBadge, { color: 'warning', variant: 'subtle' }, () => 'No');
-      },
-      enableSorting: false,
-    },
-    {
-      accessorKey: 'createdAt',
-      header: 'Created At',
-      cell: ({ row }) => new Date(row.getValue('createdAt')).toLocaleString(),
-      enableSorting: true,
-    },
-    {
-      id: 'actions',
-      enableHiding: false,
-      meta: {
-        class: {
-          th: 'text-center',
-          td: 'text-center',
-        },
-      },
-      header: 'Action',
-      cell: ({ row }) => {
-        // 향후에 다른 Action 추가를 상정하여 DropdownMenu로 구현. 현재는 투표를 하러 가는 액션 하나만 존재
-        const items = [
-          {
-            type: 'label',
-            label: 'Actions',
-          },
-          {
-            label: 'Vote',
-            onSelect() {
-              router.push(`/poll/${row.original.id}/vote`);
-            },
-          },
-          {
-            label: 'View Results',
-            onSelect() {
-              router.push(`/poll/${row.original.id}/results`);
-            },
-          },
-        ];
-
-        return h(
-          UDropdownMenu,
-          {
-            content: {
-              align: 'end',
-            },
-            items,
-            'aria-label': 'Actions dropdown',
-          },
-          () =>
-            h(UButton, {
-              icon: 'i-lucide-arrow-right',
-              color: 'neutral',
-              class: 'text-muted',
-              variant: 'ghost',
-              'aria-label': 'Actions dropdown',
-            })
-        );
-      },
-    },
-  ];
-
-  // API에서 활성화된 투표 목록을 가져오는 fetcher.
-  // useFetch === Nuxt의 Composition API
-  const { data: polls, pending } = useFetch<Poll[]>('/api/polls/active', {
+  const { data: pollData, pending } = await useFetch<Poll[]>('/api/polls/active', {
     lazy: true,
-    default: () => [], // fetch가 완료되기 전까지 들어있을 기본값
+    default: () => [],
   });
-
-  // 테이블 레퍼런스. 필터링된 행의 개수를 보여주는 데 사용
-  const table = useTemplateRef('table');
 </script>
 
 <template>
-  <div class="flex h-full flex-col items-center">
-    <div class="divide-accented w-full flex-1 divide-y">
-      <div class="flex items-center gap-2 overflow-x-auto px-4 py-3.5">
-        <UInput class="max-w-sm min-w-[12ch]" placeholder="필터링 개발 중..." disabled />
-      </div>
-
-      <UTable ref="table" :data="polls" :columns="columns" :loading="pending" sticky class="h-96">
-        <template #expanded="{ row }">
-          <pre>{{ row.original }}</pre>
-        </template>
-      </UTable>
-
-      <div class="text-muted px-4 py-3.5 text-sm">
-        {{ table?.tableApi?.getFilteredSelectedRowModel().rows.length || 0 }} active poll(s) found.
+  <div class="flex flex-col gap-8 p-8">
+    <div class="flex w-full flex-col">
+      <h1 class="text-3xl font-bold">현재 진행중인 투표</h1>
+      <p class="text-muted mt-1">현재 진행 중인 투표 및 의견 수렴</p>
+    </div>
+    <div v-if="pending" class="flex items-center justify-center">
+      <UIcon name="i-lucide-loader-2" class="animate-spin" />
+    </div>
+    <UEmpty
+      v-else-if="pollData.length === 0"
+      icon="i-lucide-archive-x"
+      title="진행중인 투표가 없습니다"
+      description="새로운 투표가 올라오길 기다려주세요"
+      class="flex-1"
+    />
+    <div v-else class="grid flex-1 grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+      <div v-for="poll in pollData" :key="poll.id" class="flex flex-col">
+        <UCard
+          :key="poll.id"
+          class="hover:border-primary cursor-pointer transition-colors"
+          @click="router.push(`/polls/${poll.id}`)"
+        >
+          <template #header>
+            <div class="flex">
+              <div class="flex items-start justify-between gap-2">
+                <div class="flex items-center gap-2">
+                  <UIcon name="i-lucide-vote" />
+                  <UBadge>{{ poll.type }}</UBadge>
+                </div>
+                <UBadge v-if="poll.isAnonymous" color="info" variant="subtle">무기명</UBadge>
+              </div>
+              <h4 class="mt-2">{{ poll.title }}</h4>
+              <p class="text-muted mt-1 text-sm">{{ poll.description }}</p>
+            </div>
+          </template>
+          <template #default>
+            <div class="">
+              <div class="text-muted-foreground space-y-2 text-sm">
+                <p>{{ `개설자: ${poll.creatorName}` }}</p>
+                <p v-if="poll.createdAt">
+                  {{ `생성일: ${format(poll.createdAt, 'yyyy-MM-dd HH:mm')}` }}
+                </p>
+                <p v-if="poll.closedAt">
+                  {{ `마감일: ${format(poll.closedAt, 'yyyy-MM-dd HH:mm')}` }}
+                </p>
+              </div>
+              <UButton class="mt-4 w-full" variant="outline">투표하기</UButton>
+            </div>
+          </template>
+        </UCard>
       </div>
     </div>
   </div>

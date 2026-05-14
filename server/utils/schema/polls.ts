@@ -1,6 +1,7 @@
 import { boolean, pgEnum, pgTable, text, timestamp, uuid, varchar } from 'drizzle-orm/pg-core';
-import { users } from './users';
 import { uuidv7 } from 'uuidv7';
+
+import { users } from './users';
 
 export const pollTypeEnum = pgEnum('poll_type', ['VOTE', 'APPLICATION', 'OPINION']);
 export const pollStatusEnum = pgEnum('poll_status', ['ACTIVE', 'CLOSED']);
