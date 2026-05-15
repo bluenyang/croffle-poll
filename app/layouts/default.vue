@@ -117,7 +117,7 @@
 
 <template>
   <!-- Main Layout -->
-  <div :class="{ dark: true }" class="flex h-screen flex-row">
+  <div class="flex h-screen flex-row">
     <USidebar
       class="flex h-full shrink-0 flex-col"
       collapsible="offcanvas"
