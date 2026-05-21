@@ -2,16 +2,15 @@
 FROM node:24-alpine AS builder
 WORKDIR /app
 
-# Install pnpm
-RUN npm i -g pnpm
-
 # Install dependencies
-COPY package*.json pnpm-lock.yaml* ./
-RUN pnpm install --frozen-lockfile
+COPY package*.json yarn.lock* .yarnrc.yml* ./
+RUN corepack enable
+RUN yarn set version canary
+RUN yarn install --immutable
 
 # Copy the source code and build
 COPY . .
-RUN pnpm run build
+RUN yarn build
 
 # Production
 FROM node:24-alpine

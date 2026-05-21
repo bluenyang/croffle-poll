@@ -28,3 +28,6 @@ logs
 .stfolder
 .stversions
 *.sync-conflict.*
+
+# Yarn Canary
+.yarn/*
