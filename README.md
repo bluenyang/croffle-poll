@@ -75,8 +75,8 @@ docker compose -f .docker/docker-compose.yaml up -d
 `.docker/docker-compose.yaml`을 구동할 때, 아래 환경 변수를 런타임에 주입하여 즉시 커스텀 초기화가 가능합니다.
 * `DATABASE_URL`: 연결할 PostgreSQL 주소
 * `NUXT_SESSION_PASSWORD`: 세션 암호화 토큰
-* `ADMIN_USERNAME`: 최초 자동 생성될 어드민 이메일 계정 (기본값: `admin@example.com`)
-* `ADMIN_PASSWORD`: 최초 자동 생성될 어드민 비밀번호 (기본값: `admin`)
+* `INIT_ADMIN_EMAIL`: 최초 자동 생성될 어드민 이메일 계정 (기본값: `admin@example.com`)
+* `INIT_ADMIN_PASSWORD`: 최초 자동 생성될 어드민 비밀번호 (기본값: `admin`)
 
 ---
 
