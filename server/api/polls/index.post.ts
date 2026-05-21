@@ -1,6 +1,6 @@
 import { db } from '~~/server/utils/db';
 import { polls, pollOptions } from '~~/server/utils/schema';
-import { AddNewPollRequestDto } from '~~/shared/dto';
+import type { AddNewPollRequestDto } from '~~/shared/dto';
 
 export default defineEventHandler(async (event) => {
   const session = await getUserSession(event);

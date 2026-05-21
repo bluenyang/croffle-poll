@@ -1,6 +1,7 @@
 import { eq } from 'drizzle-orm';
-import { users } from '~~/server/utils/schema';
+
 import { db } from '~~/server/utils/db';
+import { users } from '~~/server/utils/schema';
 import type { LoginRequestDto } from '~~/shared/dto';
 
 export default defineEventHandler(async (event) => {

@@ -1,4 +1,5 @@
 import { eq } from 'drizzle-orm';
+
 import { users } from '~~/server/utils/schema';
 import type { UserPasswordChangeRequestDto } from '~~/shared/dto';
 
