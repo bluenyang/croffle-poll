@@ -1,5 +1,6 @@
 <script setup lang="ts">
   import type { FormSubmitEvent } from '@nuxt/ui';
+
   import IconRadioGroup from '~/components/IconRadioGroup.vue';
   import SwitchFormField from '~/components/SwitchFormField.vue';
   import type { PollCreationState } from '~/types/polls';

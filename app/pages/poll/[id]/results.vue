@@ -1,5 +1,6 @@
 <script setup lang="ts">
   import type { BreadcrumbItem, TableColumn } from '@nuxt/ui';
+
   import type { PollResultData, PollVotesData } from '~/types/polls';
 
   const route = useRoute();

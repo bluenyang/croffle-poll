@@ -1,7 +1,8 @@
 import { pgTable, uuid, text, timestamp, unique } from 'drizzle-orm/pg-core';
+import { uuidv7 } from 'uuidv7';
+
 import { polls } from './polls';
 import { users } from './users';
-import { uuidv7 } from 'uuidv7';
 
 export const pollSubmissions = pgTable(
   'poll_submissions',

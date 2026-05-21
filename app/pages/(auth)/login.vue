@@ -48,7 +48,7 @@
       if (loggedIn) {
         toast.add({
           title: 'Login Success',
-          description: `You have been logged in successfully with ${(user.value as { name: string }).name ?? ''}!`,
+          description: `You have been logged in successfully with ${user.value?.nickname ?? ''}!`,
           type: 'foreground',
         });
         navigateTo('/');

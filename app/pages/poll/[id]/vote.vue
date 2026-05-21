@@ -1,5 +1,6 @@
 <script lang="ts" setup>
   import type { BreadcrumbItem } from '@nuxt/ui';
+
   import PollVoter from '~/components/PollVoter.vue';
   import type { PollData } from '~/types/polls';
 

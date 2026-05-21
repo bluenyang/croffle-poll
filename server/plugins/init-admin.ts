@@ -1,7 +1,8 @@
-import { eq } from 'drizzle-orm';
 import { consola } from 'consola';
-import { users } from '../utils/schema/users';
+import { eq } from 'drizzle-orm';
+
 import { db } from '../utils/db';
+import { users } from '../utils/schema/users';
 
 export default defineNitroPlugin(async () => {
   const logger = consola.withTag('init-admin');
