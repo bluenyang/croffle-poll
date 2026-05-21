@@ -34,6 +34,14 @@
         icon: 'i-lucide-history',
         to: '/history',
       },
+    ],
+    [
+      {
+        label: 'Create New',
+        icon: 'i-lucide-plus',
+        to: '/poll/new',
+        class: 'p-2 border border-muted rounded-lg hover:border-inverted/50',
+      },
       ...(isAdmin.value
         ? [
             {
@@ -43,19 +51,6 @@
             },
           ]
         : []),
-    ],
-    [
-      {
-        label: 'Create New',
-        icon: 'i-lucide-plus',
-        to: '/poll/new',
-        class: 'p-2 border border-muted rounded-lg hover:border-inverted/50',
-      },
-      {
-        label: 'Accounts',
-        icon: 'i-lucide-user',
-        to: '/accounts',
-      },
     ],
   ];
 
