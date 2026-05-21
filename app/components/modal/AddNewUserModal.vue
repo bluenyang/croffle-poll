@@ -1,12 +1,14 @@
 <script setup lang="ts">
+import type { UserAddRequestDto } from '~~/shared/dto';
+
   const emit = defineEmits<{
     (e: 'submit'): void;
   }>();
 
   const isNewUserModalOpen = defineModel<boolean>('open');
 
-  const initFormState = {
-    name: '',
+  const initFormState: UserAddRequestDto = {
+    nickname: '',
     email: '',
     password: '',
     role: 'MEMBER',
@@ -22,7 +24,7 @@
   async function onAddNewUserSubmit() {
     console.log(newUserForm);
 
-    if (!newUserForm.name || newUserForm.name.trim() === '') {
+    if (!newUserForm.nickname || newUserForm.nickname.trim() === '') {
       toast.add({
         title: 'Warning',
         description: '이름을 입력해주세요.',
@@ -108,10 +110,10 @@
   >
     <template #body>
       <UForm id="add-user-form" class="flex flex-col gap-4" @submit="onAddNewUserSubmit">
-        <UFormField label="Name" class="w-full" :ui="{ label: 'text-muted' }">
+        <UFormField label="Nickname" class="w-full" :ui="{ label: 'text-muted' }">
           <UInput
-            v-model="newUserForm.name"
-            placeholder="Name"
+            v-model="newUserForm.nickname"
+            placeholder="Nickname"
             :ui="{
               trailing: 'pl-4',
               base: 'bg-black py-4 text-muted',
