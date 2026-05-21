@@ -1,6 +1,7 @@
 import { and, eq } from 'drizzle-orm';
+
 import { db } from '~~/server/utils/db';
-import { SubmitPollRequest } from '~~/shared/dto/poll';
+import type { SubmitPollRequest } from '~~/shared/dto/poll';
 
 export default defineEventHandler(async (event) => {
   const pollId = event.context.params?.id;

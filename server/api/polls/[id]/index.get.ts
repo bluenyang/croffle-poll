@@ -1,6 +1,7 @@
+import { eq } from 'drizzle-orm';
+
 import { db } from '~~/server/utils/db';
 import { polls, pollOptions, users } from '~~/server/utils/schema';
-import { eq } from 'drizzle-orm';
 
 export default defineEventHandler(async (event) => {
   // URL에서 파라미터 [id] 가져오기

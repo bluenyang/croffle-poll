@@ -1,10 +1,9 @@
-import withNuxt from './.nuxt/eslint.config.mjs';
-
+import eslintConfigPrettier from 'eslint-config-prettier';
 import pluginImport from 'eslint-plugin-import-x';
 import pluginPromise from 'eslint-plugin-promise';
 import pluginUnicorn from 'eslint-plugin-unicorn';
 
-import eslintConfigPrettier from 'eslint-config-prettier';
+import withNuxt from './.nuxt/eslint.config.mjs';
 
 export default withNuxt(
   {

@@ -1,13 +1,7 @@
+import { eq } from 'drizzle-orm';
+
 import { db } from '~~/server/utils/db';
 import { polls, pollOptions, users } from '~~/server/utils/schema';
-import { count, eq, sql } from 'drizzle-orm';
-
-type PollResponse = {
-  value: string;
-  count: number;
-  voters: string[];
-  rank: number;
-}[];
 
 export default defineEventHandler(async (event) => {
   const pollId = event.context.params?.id;

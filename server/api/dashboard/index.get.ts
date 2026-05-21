@@ -1,4 +1,5 @@
-import { count, desc, eq, sql } from 'drizzle-orm';
+import { count, sql } from 'drizzle-orm';
+
 import { db } from '~~/server/utils/db';
 import { polls, users } from '~~/server/utils/schema';
 
