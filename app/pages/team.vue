@@ -3,7 +3,6 @@
 
   import AddNewUserModal from '~/components/modal/AddNewUserModal.vue';
   import DeleteUserModal from '~/components/modal/DeleteUserModal.vue';
-  import EditPasswordModal from '~/components/modal/EditPasswordModal.vue';
   import type { User } from '~/types/users';
 
   const UDropdownMenu = resolveComponent('UDropdownMenu');
@@ -12,7 +11,6 @@
   const { data: users, status, execute } = await useLazyFetch<User[]>('/api/admin/users', {});
 
   const isNewUserModalOpen = ref<boolean>(false);
-  const isEditPasswordModalOpen = ref<boolean>(false);
   const isDeleteModalOpen = ref<boolean>(false);
   const selectedUser = ref<User | null>(null);
 
@@ -63,13 +61,6 @@
           {
             type: 'label',
             label: 'Actions',
-          },
-          {
-            label: 'Edit Password',
-            onSelect() {
-              selectedUser.value = row.original;
-              isEditPasswordModalOpen.value = true;
-            },
           },
           {
             label: 'Delete',
@@ -135,14 +126,6 @@
 
     <!-- New User -->
     <AddNewUserModal v-model:open="isNewUserModalOpen" @submit="execute" />
-
-    <!-- Password Modal -->
-    <EditPasswordModal
-      v-model:open="isEditPasswordModalOpen"
-      v-model:user="selectedUser"
-      :fetch-url="`/api/admin/users/password`"
-      @submit="execute"
-    />
 
     <!-- Delete Modal -->
     <DeleteUserModal

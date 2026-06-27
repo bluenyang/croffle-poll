@@ -1,25 +1,18 @@
 <script setup lang="ts">
-  import type { FormSubmitEvent, NavigationMenuItem } from '@nuxt/ui';
-
-  interface LoginData {
-    email: string;
-    password: string;
-  }
+  import type { NavigationMenuItem } from '@nuxt/ui';
 
   definePageMeta({
     layout: false,
   });
 
-  const show = ref(false);
-  const pending = ref(false);
+  const { loggedIn } = useUserSession();
 
-  const formData = reactive<LoginData>({
-    email: '',
-    password: '',
+  // If already logged in, redirect to home
+  onMounted(() => {
+    if (loggedIn.value) {
+      navigateTo('/');
+    }
   });
-
-  const { loggedIn, user, fetch: refreshSession } = useUserSession();
-  const toast = useToast();
 
   // footer 네비게이션 메뉴 아이템 정의
   const footerItems: NavigationMenuItem[] = [
@@ -34,38 +27,6 @@
       target: '_blank',
     },
   ];
-
-  async function onSubmit(_: FormSubmitEvent<LoginData>) {
-    pending.value = true;
-    try {
-      await $fetch('/api/auth/login', {
-        method: 'POST',
-        body: formData,
-      });
-
-      await refreshSession();
-
-      if (loggedIn) {
-        toast.add({
-          title: 'Login Success',
-          description: `You have been logged in successfully with ${user.value?.nickname ?? ''}!`,
-          type: 'foreground',
-        });
-        navigateTo('/');
-      }
-    } catch (err) {
-      console.error(err);
-
-      toast.add({
-        title: 'Login Failed',
-        description: 'Failed to login',
-        type: 'foreground',
-        color: 'error',
-      });
-    } finally {
-      pending.value = false;
-    }
-  }
 </script>
 
 <template>
@@ -81,53 +42,20 @@
       </div>
     </div>
     <UCard class="w-full max-w-md rounded-2xl bg-white/3 p-4 shadow-lg shadow-black">
-      <UForm class="flex flex-col gap-4" @submit="onSubmit">
-        <UFormField label="Email" class="w-full" :ui="{ label: 'text-muted' }">
-          <UInput
-            v-model="formData.email"
-            class="w-full"
-            placeholder="example@croffledev.kr"
-            icon="i-lucide-mail"
-            :ui="{
-              base: 'bg-black py-4',
-            }"
-          />
-        </UFormField>
-        <UFormField label="Password" class="w-full" :ui="{ label: 'text-muted' }">
-          <UInput
-            v-model="formData.password"
-            placeholder="Password"
-            :type="show ? 'text' : 'password'"
-            :ui="{
-              trailing: 'pl-4',
-              base: 'bg-black py-4',
-            }"
-            icon="i-lucide-lock"
-            class="w-full"
-          >
-            <template #trailing>
-              <UButton
-                color="neutral"
-                variant="link"
-                size="sm"
-                :icon="show ? 'i-lucide-eye-off' : 'i-lucide-eye'"
-                :aria-label="show ? 'Hide password' : 'Show password'"
-                :aria-pressed="show"
-                aria-controls="password"
-                @click="show = !show"
-              />
-            </template>
-          </UInput>
-        </UFormField>
+      <div class="flex flex-col gap-4 text-center">
+        <p class="text-muted mb-4 text-sm">
+          Welcome! Please sign in with your Authentik account to continue.
+        </p>
 
         <UButton
-          type="submit"
-          label="Login"
+          to="/auth/authentik"
+          label="Login with Authentik"
           icon="i-lucide-log-in"
           variant="solid"
-          class="from-primary-300 to-primary-500 relative mt-4 w-full items-center justify-center bg-linear-to-r py-4 hover:shadow-lg"
+          class="from-primary-300 to-primary-500 relative w-full items-center justify-center bg-linear-to-r py-4 hover:shadow-lg"
+          external
         />
-      </UForm>
+      </div>
     </UCard>
 
     <UFooter class="w-full min-w-4/5">

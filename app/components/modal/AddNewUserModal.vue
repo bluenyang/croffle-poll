@@ -10,13 +10,10 @@ import type { UserAddRequestDto } from '~~/shared/dto';
   const initFormState: UserAddRequestDto = {
     nickname: '',
     email: '',
-    password: '',
     role: 'MEMBER',
   };
 
   const newUserForm = reactive({ ...initFormState });
-
-  const showPassword = ref<boolean>(false);
 
   const toast = useToast();
   const pending = ref<boolean>(false);
@@ -38,16 +35,6 @@ import type { UserAddRequestDto } from '~~/shared/dto';
       toast.add({
         title: 'Warning',
         description: '이메일을 입력해주세요.',
-        type: 'foreground',
-        color: 'warning',
-      });
-      return;
-    }
-
-    if (!newUserForm.password || newUserForm.password.trim() === '') {
-      toast.add({
-        title: 'Warning',
-        description: '비밀번호를 입력해주세요.',
         type: 'foreground',
         color: 'warning',
       });
@@ -95,7 +82,6 @@ import type { UserAddRequestDto } from '~~/shared/dto';
   watch(isNewUserModalOpen, (isOpen) => {
     if (isOpen) {
       Object.assign(newUserForm, initFormState);
-      showPassword.value = false;
     }
   });
 </script>
@@ -134,32 +120,7 @@ import type { UserAddRequestDto } from '~~/shared/dto';
             class="w-full"
           />
         </UFormField>
-        <UFormField label="Password" class="w-full" :ui="{ label: 'text-muted' }">
-          <UInput
-            v-model="newUserForm.password"
-            placeholder="Password"
-            :type="showPassword ? 'text' : 'password'"
-            :ui="{
-              trailing: 'pl-4',
-              base: 'bg-black py-4 text-muted',
-            }"
-            icon="i-lucide-lock"
-            class="w-full"
-          >
-            <template #trailing>
-              <UButton
-                color="neutral"
-                variant="link"
-                size="sm"
-                :icon="showPassword ? 'i-lucide-eye-off' : 'i-lucide-eye'"
-                :aria-label="showPassword ? 'Hide password' : 'Show password'"
-                :aria-pressed="showPassword"
-                aria-controls="password"
-                @click="showPassword = !showPassword"
-              />
-            </template>
-          </UInput>
-        </UFormField>
+
         <UFormField label="Role" class="w-full" :ui="{ label: 'text-muted' }">
           <USelectMenu
             v-model="newUserForm.role"

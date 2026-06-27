@@ -3,7 +3,6 @@
   const toast = useToast();
 
   const isProfilePending = ref(false);
-  const isPasswordPending = ref(false);
 
   // 1. Profile Form State
   const profileForm = reactive({
@@ -67,73 +66,6 @@
     }
   }
 
-  // 2. Password Form State
-  const passwordForm = reactive({
-    newPassword: '',
-    confirmPassword: '',
-  });
-
-  const isPasswordMatched = computed(() => {
-    if (!passwordForm.newPassword || !passwordForm.confirmPassword) return true;
-    return passwordForm.newPassword === passwordForm.confirmPassword;
-  });
-
-  const isPasswordValid = computed(() => {
-    return (
-      passwordForm.newPassword.length >= 4 &&
-      passwordForm.newPassword === passwordForm.confirmPassword
-    );
-  });
-
-  async function onUpdatePassword() {
-    if (!passwordForm.newPassword) {
-      toast.add({
-        title: '입력 오류',
-        description: '새 비밀번호를 입력해 주세요.',
-        color: 'error',
-      });
-      return;
-    }
-
-    if (passwordForm.newPassword !== passwordForm.confirmPassword) {
-      toast.add({
-        title: '입력 오류',
-        description: '비밀번호 확인이 일치하지 않습니다.',
-        color: 'error',
-      });
-      return;
-    }
-
-    isPasswordPending.value = true;
-    try {
-      await $fetch('/api/auth/password', {
-        method: 'PATCH',
-        body: {
-          newPassword: passwordForm.newPassword,
-        },
-      });
-
-      // 입력 필드 초기화
-      passwordForm.newPassword = '';
-      passwordForm.confirmPassword = '';
-
-      toast.add({
-        title: '비밀번호 변경 성공',
-        description: '비밀번호가 성공적으로 변경되었습니다.',
-        type: 'foreground',
-      });
-    } catch (err) {
-      console.error(err);
-      const fetchError = err as { data?: { message?: string } };
-      toast.add({
-        title: '변경 실패',
-        description: fetchError.data?.message || '비밀번호를 변경하는 중 오류가 발생했습니다.',
-        color: 'error',
-      });
-    } finally {
-      isPasswordPending.value = false;
-    }
-  }
 </script>
 
 <template>
@@ -193,56 +125,7 @@
           </UForm>
         </UCard>
 
-        <!-- Password Card -->
-        <UCard class="shadow-sm">
-          <template #header>
-            <div class="flex items-center gap-2">
-              <UIcon name="i-lucide-key-round" class="text-primary size-5" />
-              <h3 class="text-xl font-bold">비밀번호 변경</h3>
-            </div>
-            <p class="text-muted mt-1 text-sm">보안을 위해 정기적으로 비밀번호를 변경해 주세요.</p>
-          </template>
 
-          <UForm class="flex flex-col gap-4" @submit="onUpdatePassword">
-            <UFormField label="새 비밀번호" :ui="{ label: 'text-muted-foreground font-medium' }">
-              <UInput
-                v-model="passwordForm.newPassword"
-                type="password"
-                placeholder="최소 4자 이상 입력해 주세요"
-                icon="i-lucide-lock"
-                class="w-full"
-                :ui="{ base: 'bg-neutral-900' }"
-              />
-            </UFormField>
-
-            <UFormField
-              label="새 비밀번호 확인"
-              :error="!isPasswordMatched ? '비밀번호가 일치하지 않습니다.' : undefined"
-              :ui="{ label: 'text-muted-foreground font-medium' }"
-            >
-              <UInput
-                v-model="passwordForm.confirmPassword"
-                type="password"
-                placeholder="새 비밀번호를 다시 입력해 주세요"
-                icon="i-lucide-lock-keyhole"
-                class="w-full"
-                :ui="{ base: 'bg-neutral-900' }"
-              />
-            </UFormField>
-
-            <div class="mt-2 flex justify-end">
-              <UButton
-                type="submit"
-                color="primary"
-                :loading="isPasswordPending"
-                :disabled="!isPasswordValid"
-                class="px-6 font-bold"
-              >
-                비밀번호 변경
-              </UButton>
-            </div>
-          </UForm>
-        </UCard>
       </div>
 
       <!-- Right Column: Account Info Summary -->
