@@ -8,7 +8,6 @@ export const users = pgTable('users', {
     .primaryKey()
     .$defaultFn(() => uuidv7()),
   email: varchar('email', { length: 100 }).notNull().unique(),
-  passwordHash: varchar('password_hash', { length: 255 }).notNull(),
   nickname: varchar('nickname', { length: 50 }).notNull(),
   role: userRoleEnum('role').default('MEMBER').notNull(),
   createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
