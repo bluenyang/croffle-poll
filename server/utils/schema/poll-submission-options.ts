@@ -1,5 +1,8 @@
 import { pgTable, uuid, primaryKey } from 'drizzle-orm/pg-core';
 
+import { pollOptions } from './poll-options';
+import { pollSubmissions } from './poll-submissions';
+
 export const pollSubmissionOptions = pgTable(
   'poll_submission_options',
   {

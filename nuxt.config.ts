@@ -14,7 +14,13 @@ export default defineNuxtConfig({
   },
 
   runtimeConfig: {
-    databaseUrl: process.env.DATABASE_URL,
+    db: {
+      host: process.env.PGHOST,
+      port: Number(process.env.PGPORT),
+      user: process.env.PGUSER,
+      password: process.env.PGPASSWORD,
+      database: process.env.PGDATABASE
+    },
     initAdmin: {
       initEmail: process.env.INIT_ADMIN_EMAIL,
       password: process.env.INIT_ADMIN_PASSWORD,
