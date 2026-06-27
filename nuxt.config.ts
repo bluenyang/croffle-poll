@@ -21,10 +21,7 @@ export default defineNuxtConfig({
       password: process.env.PGPASSWORD,
       database: process.env.PGDATABASE
     },
-    initAdmin: {
-      initEmail: process.env.INIT_ADMIN_EMAIL,
-      password: process.env.INIT_ADMIN_PASSWORD,
-    },
+    authentikAdminGroup: process.env.AUTHENTIK_ADMIN_GROUP,
   },
   routeRules: {
     '/': { prerender: false },

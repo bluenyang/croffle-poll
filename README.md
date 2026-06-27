@@ -34,9 +34,11 @@ yarn install
 DATABASE_URL=postgresql://<DB_USER>:<DB_PASSWORD>@localhost:5432/<DB_NAME>
 NUXT_SESSION_PASSWORD=minimum_32_characters_random_string
 
-# 최초 실행 시 자동으로 생성될 슈퍼 관리자(Admin) 계정
-INIT_ADMIN_EMAIL=admin@example.com
-INIT_ADMIN_PASSWORD=your_secure_password
+# Authentik OAuth 설정
+NUXT_OAUTH_AUTHENTIK_CLIENT_ID=your-authentik-client-id
+NUXT_OAUTH_AUTHENTIK_CLIENT_SECRET=your-authentik-client-secret
+NUXT_OAUTH_AUTHENTIK_DOMAIN=your-authentik-domain
+AUTHENTIK_ADMIN_GROUP=your-authentik-admin-group
 ```
 
 ### 3. 데이터베이스 스키마 반영 (Drizzle)
@@ -75,13 +77,17 @@ docker compose -f .docker/docker-compose.yaml up -d
 `.docker/docker-compose.yaml`을 구동할 때, 아래 환경 변수를 런타임에 주입하여 즉시 커스텀 초기화가 가능합니다.
 * `DATABASE_URL`: 연결할 PostgreSQL 주소
 * `NUXT_SESSION_PASSWORD`: 세션 암호화 토큰
-* `INIT_ADMIN_EMAIL`: 최초 자동 생성될 어드민 이메일 계정 (기본값: `admin@example.com`)
-* `INIT_ADMIN_PASSWORD`: 최초 자동 생성될 어드민 비밀번호 (기본값: `admin`)
+* `NUXT_OAUTH_AUTHENTIK_CLIENT_ID`: Authentik 클라이언트 ID
+* `NUXT_OAUTH_AUTHENTIK_CLIENT_SECRET`: Authentik 클라이언트 Secret
+* `NUXT_OAUTH_AUTHENTIK_DOMAIN`: Authentik 도메인 주소
+* `AUTHENTIK_ADMIN_GROUP`: 관리자 권한을 부여할 Authentik 그룹명
 
 ---
 
-## 🔒 초기 관리자 계정(Admin) 자동 생성 플러그인
-애플리케이션이 처음 실행될 때, 데이터베이스에 관리자(`role: 'ADMIN'`) 계정이 존재하는지 판별하여 없을 경우 **`INIT_ADMIN_EMAIL`**과 **`INIT_ADMIN_PASSWORD`** 환경 변수를 직접 노킹하여 슈퍼 관리자 계정을 자동으로 데이터베이스에 안전하게 영속화합니다. (중복 생성 방지 룰 탑재 완료)
+## 🔒 Authentik OIDC 연동 및 자동 회원가입
+로그인은 100% Authentik 기반의 OAuth 2.0 (OIDC)로 동작합니다.
+최초 로그인 시 데이터베이스에 유저가 없을 경우, Authentik의 프로필(이메일, 닉네임 등)을 기반으로 계정을 자동 생성(`auto-registration`)합니다.
+또한, Authentik에서 반환되는 그룹 정보를 파악하여, `AUTHENTIK_ADMIN_GROUP`으로 지정된 그룹에 속한 사용자는 어플리케이션 내에서 최고 관리자(`ADMIN`) 권한을 자동으로 부여받게 됩니다.
 
 ---
 
