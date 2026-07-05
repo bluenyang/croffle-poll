@@ -25,6 +25,7 @@ export const PollResultResponseSchema = z.object({
   allowCustomOptions: z.boolean(),
   type: z.enum(['VOTE', 'APPLICATION', 'OPINION']),
   status: z.enum(['ACTIVE', 'CLOSED']),
+  optionType: z.string(),
   closedAt: z.coerce.date().nullable(),
   totalVotes: z.number(),
   submissions: z.union([z.array(VoteSubmissionSchema), z.array(ApplicationSubmissionSchema)]),

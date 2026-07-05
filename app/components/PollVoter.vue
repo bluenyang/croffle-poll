@@ -4,18 +4,17 @@
   import type { PollData } from '~/types/polls';
 
   type VotePayload = {
-    pollId: number;
-    optionIds: number[];
-    customOptionValue: string[];
+    optionIds: string[];
+    customOptionValues: string[];
   };
 
   type SingleSelctedOptions = {
-    selectedOptionId: number | null;
+    selectedOptionId: string | null;
     addedOptionValue: string;
   };
 
   type MultipleSelctedOptions = {
-    selectedOptionIds: number[];
+    selectedOptionIds: string[];
     addedOptionValues: string[];
   };
 
@@ -35,12 +34,12 @@
       singleSelctedOptions.value.selectedOptionId
         ? String(singleSelctedOptions.value.selectedOptionId)
         : undefined,
-    // 화면에서 클릭해서 들어올 땐 다시 number로 변환해서 상태에 저장
+    // 화면에서 클릭해서 들어올 땐 다시 상태에 저장
     set: (val) => {
       if (val === 'custom') {
-        singleSelctedOptions.value.selectedOptionId = -1;
+        singleSelctedOptions.value.selectedOptionId = 'custom';
       } else {
-        singleSelctedOptions.value.selectedOptionId = val ? Number(val) : null;
+        singleSelctedOptions.value.selectedOptionId = val ? String(val) : null;
       }
     },
   });
@@ -50,9 +49,9 @@
     addedOptionValues: [],
   });
   const selectedMultipleIdsStr = computed({
-    get: () => multipleSelctedOptions.value.selectedOptionIds.map((v) => String(v)),
+    get: () => multipleSelctedOptions.value.selectedOptionIds,
     set: (val) => {
-      multipleSelctedOptions.value.selectedOptionIds = val.map((v) => Number(v));
+      multipleSelctedOptions.value.selectedOptionIds = val;
     },
   });
 
@@ -60,18 +59,18 @@
   const mappedMultipleOptionItems = computed(() => {
     return poll.options.map((option) => ({
       value: String(option.id), // UI 컴포넌트가 요구하는 string 형태
-      label: formatOptionValue(option.value), // 화면에 보여줄 텍스트
+      label: formatOptionValue(option.content), // 화면에 보여줄 텍스트
     }));
   });
 
   const mappedSingleOptionItems = computed(() => {
     const items = poll.options.map((option) => ({
       value: String(option.id), // UI 컴포넌트가 요구하는 string 형태
-      label: formatOptionValue(option.value), // 화면에 보여줄 텍스트
+      label: formatOptionValue(option.content), // 화면에 보여줄 텍스트
     }));
     if (poll.allowCustomOptions) {
       items.push({
-        value: '-1',
+        value: 'custom',
         label: '직접 입력',
       });
     }
@@ -118,7 +117,7 @@
       }
     } else {
       // 단일 선택 방어 로직: '직접 입력'을 선택해놓고 값을 입력하지 않은 경우
-      if (singleSelctedOptions.value.selectedOptionId === -1) {
+      if (singleSelctedOptions.value.selectedOptionId === 'custom') {
         if (singleSelctedOptions.value.addedOptionValue.trim() === '') {
           toast.add({
             title: '알림',
@@ -138,7 +137,7 @@
 
     try {
       // 단일 선택이든 다중 선택이든 백엔드 처리가 편하도록 배열 형태로 통일해서 전송
-      let selectedOptionIds: number[] = [];
+      let selectedOptionIds: string[] = [];
       let addedOptions: string[] = [];
 
       // 선택된 항목과 커스텀 항목을 취합
@@ -148,10 +147,10 @@
         addedOptions = multipleSelctedOptions.value.addedOptionValues;
       } else {
         // 서버에 보낼 데이터는 배열로 통일
-        // -1(직접 입력 식별자)은 서버에 보내는 OptionIds 배열에서 제외
+        // 'custom'(직접 입력 식별자)은 서버에 보내는 OptionIds 배열에서 제외
         selectedOptionIds =
           singleSelctedOptions.value.selectedOptionId &&
-          singleSelctedOptions.value.selectedOptionId !== -1
+          singleSelctedOptions.value.selectedOptionId !== 'custom'
             ? [singleSelctedOptions.value.selectedOptionId]
             : [];
         addedOptions = singleSelctedOptions.value.addedOptionValue
@@ -161,15 +160,14 @@
 
       // 백엔드에 전달할 페이로드 생성
       const payload = {
-        pollId: poll.id,
         optionIds: selectedOptionIds,
-        customOptionValue: addedOptions,
+        customOptionValues: addedOptions,
       };
 
       // console.log('서버로 보낼 투표 데이터:', payload);
 
       // API 호출
-      await $fetch(`/api/polls/${poll.id}`, {
+      await $fetch(`/api/polls/${poll.id}` as string, {
         method: 'POST',
         body: payload,
       });
@@ -186,6 +184,11 @@
     } finally {
       isSubmitting.value = false;
     }
+  }
+
+  function removeAddedOption(index: number) {
+    multipleSelctedOptions.value.addedOptionValues.splice(index, 1);
+    multipleSelctedOptions.value.selectedOptionIds.splice(index, 1);
   }
 
   onMounted(() => {
@@ -268,7 +271,7 @@
                     variant="ghost"
                     class="hover:bg-red-700/30"
                     :ui="{ base: 'size-8 p-0 flex items-center justify-center' }"
-                    @click="multipleSelctedOptions.addedOptionValues.splice(index, 1)"
+                    @click="removeAddedOption(index)"
                   >
                     <UIcon name="i-lucide-trash" class="size-4 bg-red-500" />
                   </UButton>
@@ -305,7 +308,7 @@
 
               <!-- 직접입력 -->
               <div
-                v-if="poll.allowCustomOptions && selectedSingleIdStr === '-1'"
+                v-if="poll.allowCustomOptions && selectedSingleIdStr === 'custom'"
                 class="mt-4 flex w-full flex-row items-center gap-2"
               >
                 <UInput

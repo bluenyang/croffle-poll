@@ -9,6 +9,7 @@ export const AddNewPollRequestSchema = z.object({
   type: z.enum(['VOTE', 'APPLICATION', 'OPINION']),
   status: z.enum(['ACTIVE', 'CLOSED']).optional(),
   closedAt: z.coerce.date().optional(),
+  optionType: z.enum(['TEXT', 'DATE']).default('TEXT'),
   options: z.array(z.object({ content: z.string() })),
 });
 

@@ -24,13 +24,14 @@
     try {
       const payload = {
         ...formState,
+        optionType: formState.optionType,
         options: formState.options.map((opt) => {
           if (formState.optionType === 'TEXT') {
-            return { value: opt.text };
+            return { content: opt.text };
           } else {
             const date = opt.date?.toString() ?? '';
             const time = opt.time?.toString() ?? '00:00';
-            return { value: `${date}T${time}` };
+            return { content: `${date}T${time}` };
           }
         }),
       };

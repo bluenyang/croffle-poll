@@ -19,6 +19,7 @@ export default defineEventHandler(async (event) => {
       allowCustomOptions: polls.allowCustomOptions,
       type: polls.type,
       status: polls.status,
+      optionType: polls.optionType,
       createdAt: polls.createdAt,
     })
     .from(polls)

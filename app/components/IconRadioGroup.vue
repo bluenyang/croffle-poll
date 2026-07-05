@@ -11,7 +11,7 @@
     },
     {
       label: 'Timeline Selection',
-      description: '아직 개발 중입니다 (사용 금지)',
+      description: '특정 날짜와 시간을 투표 항목으로 제공합니다. 약속 잡기에 적합합니다.',
       value: 'DATE',
       icon: 'i-lucide-chart-gantt',
     },

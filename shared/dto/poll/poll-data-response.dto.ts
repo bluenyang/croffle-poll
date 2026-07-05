@@ -19,6 +19,7 @@ export const PollDataResponseSchema = z.object({
   allowCustomOptions: z.boolean(),
   type: z.string(),
   status: z.string(),
+  optionType: z.string(),
   closedAt: z.coerce.date().nullable(),
   options: z.array(PollOptionResponseSchema),
 });

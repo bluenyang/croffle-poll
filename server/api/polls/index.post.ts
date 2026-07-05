@@ -19,6 +19,7 @@ export default defineEventHandler(async (event) => {
     allowCustomOptions,
     type,
     status,
+    optionType,
     closedAt,
     options,
   } = await readValidatedBody(event, AddNewPollRequestSchema.parse);
@@ -38,6 +39,7 @@ export default defineEventHandler(async (event) => {
           allowCustomOptions,
           type,
           status,
+          optionType,
           closedAt,
         })
         .returning();

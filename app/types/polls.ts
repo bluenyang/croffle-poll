@@ -18,10 +18,10 @@ export interface PollCreationState {
 }
 
 export interface PollOptionData {
-  id: number;
-  pollId: number;
+  id: string;
+  pollId: string;
   creatorName: string;
-  value: string;
+  content: string;
 }
 
 export interface PollVotesData {
@@ -32,7 +32,7 @@ export interface PollVotesData {
 }
 
 export type PollData = {
-  id: number;
+  id: string;
   title: string;
   description: string | null;
   createdAt: Date;
@@ -41,6 +41,7 @@ export type PollData = {
   isMultipleChoice: boolean;
   allowCustomOptions: boolean;
   optionType: string;
+  status: string;
   isClosed: boolean;
   options: PollOptionData[];
 };
@@ -55,6 +56,7 @@ export type PollResultData = {
   isMultipleChoice: boolean;
   allowCustomOptions: boolean;
   optionType: string;
+  status: string;
   isClosed: boolean;
   totalVotes: number;
   votes: PollVotesData[];
