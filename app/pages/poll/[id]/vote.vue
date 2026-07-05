@@ -19,7 +19,7 @@
     },
   ]);
 
-  const selectedOptions = ref<{ id: number; selected: boolean }[]>([]);
+  const selectedOptions = ref<{ id: string; selected: boolean }[]>([]);
 
   onMounted(() => {
     data.value?.options.forEach((option) => {
