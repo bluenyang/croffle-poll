@@ -18,10 +18,14 @@ export default defineEventHandler(async (event) => {
   const isAdmin = session.user.role === 'ADMIN';
 
   // 작성자 본인인지 확인하기 위해 조건에 creatorId 추가
+  const whereClause = isAdmin
+    ? eq(polls.id, pollId)
+    : and(eq(polls.id, pollId), eq(polls.creatorId, session.user.id));
+
   const result = await db
     .update(polls)
     .set({ status: 'CLOSED', closedAt: new Date() })
-    .where(and(eq(polls.id, pollId), isAdmin ? undefined : eq(polls.creatorId, session.user.id)))
+    .where(whereClause)
     .returning();
 
   if (result.length === 0) {
