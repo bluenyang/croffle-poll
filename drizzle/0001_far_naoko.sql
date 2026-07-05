@@ -1,0 +1,1 @@
+ALTER TABLE "polls" ADD COLUMN "option_type" varchar(50) DEFAULT 'TEXT' NOT NULL;

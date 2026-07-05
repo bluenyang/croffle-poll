@@ -8,6 +8,13 @@
       "when": 1782581644925,
       "tag": "0000_parched_squadron_sinister",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1783271071417,
+      "tag": "0001_far_naoko",
+      "breakpoints": true
     }
   ]
 }
