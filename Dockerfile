@@ -18,6 +18,7 @@ WORKDIR /app
 
 # Copy built file from builder
 COPY --from=builder /app/.output ./.output
+COPY --from=builder /app/drizzle ./drizzle
 
 # Expose the port
 EXPOSE 3000
