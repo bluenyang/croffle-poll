@@ -3,7 +3,10 @@ import { count, sql } from 'drizzle-orm';
 import { db } from '~~/server/utils/db';
 import { polls, users } from '~~/server/utils/schema';
 
-export default defineEventHandler(async (_) => {
+export default defineEventHandler(async (event) => {
+  const session = await getUserSession(event);
+  if (!session.user) throw createError({ statusCode: 401 });
+
   // 최신 투표가 위로 오도록 desc ordering
   const [pollData] = await db
     .select({
