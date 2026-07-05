@@ -8,6 +8,6 @@ export const UserAddRequestSchema = z.object({
 export type UserAddRequestDto = z.infer<typeof UserAddRequestSchema>;
 
 export const UserDeleteRequestSchema = z.object({
-  userId: z.uuid({ version: 'v7' }),
+  userId: z.uuidv7(),
 });
 export type UserDeleteRequestDto = z.infer<typeof UserDeleteRequestSchema>;
