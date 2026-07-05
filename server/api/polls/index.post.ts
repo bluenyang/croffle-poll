@@ -1,6 +1,6 @@
 import { db } from '~~/server/utils/db';
 import { polls, pollOptions } from '~~/server/utils/schema';
-import type { AddNewPollRequestDto } from '~~/shared/dto';
+import { AddNewPollRequestSchema } from '~~/shared/dto';
 
 export default defineEventHandler(async (event) => {
   const session = await getUserSession(event);
@@ -21,7 +21,7 @@ export default defineEventHandler(async (event) => {
     status,
     closedAt,
     options,
-  } = await readBody<AddNewPollRequestDto>(event);
+  } = await readValidatedBody(event, AddNewPollRequestSchema.parse);
 
   try {
     // Start Transaction: All operations inside must succeed for any to be committed to the DB

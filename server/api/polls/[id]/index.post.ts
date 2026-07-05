@@ -1,13 +1,13 @@
 import { and, eq } from 'drizzle-orm';
 
 import { db } from '~~/server/utils/db';
-import type { SubmitPollRequest } from '~~/shared/dto/poll';
+import { SubmitPollRequestSchema } from '~~/shared/dto/poll';
 
 export default defineEventHandler(async (event) => {
   const pollId = event.context.params?.id;
   if (!pollId) throw createError({ statusCode: 400, statusMessage: '투표를 찾을 수 없습니다.' });
 
-  const { optionIds, content, customOptionValues } = await readBody<SubmitPollRequest>(event);
+  const { optionIds, content, customOptionValues } = await readValidatedBody(event, SubmitPollRequestSchema.parse);
 
   return await db.transaction(async (tx) => {
     const session = await getUserSession(event);
