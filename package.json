@@ -26,7 +26,8 @@
     "nuxt-auth-utils": "^0.5.29",
     "postgres": "^3.4.9",
     "tailwindcss": "^4.3.0",
-    "uuidv7": "^1.2.1"
+    "uuidv7": "^1.2.1",
+    "zod": "^4.4.3"
   },
   "devDependencies": {
     "@internationalized/date": "^3.12.1",
