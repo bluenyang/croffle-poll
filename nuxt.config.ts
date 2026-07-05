@@ -31,6 +31,15 @@ export default defineNuxtConfig({
   nitro: {
     preset: 'node-server',
   },
+  vite: {
+    optimizeDeps: {
+      include: [
+        'date-fns',
+        '@vue/devtools-core',
+        '@vue/devtools-kit',
+      ]
+    }
+  },
 
   eslint: {
     config: {

@@ -1,8 +1,6 @@
 <script setup lang="ts">
   import type { NavigationMenuItem } from '@nuxt/ui';
 
-  import EditPasswordModal from '~/components/modal/EditPasswordModal.vue';
-
   const { clear } = useUserSession();
   const toast = useToast();
   const colorMode = useColorMode();
@@ -13,8 +11,6 @@
     const { user } = session.value;
     return user?.role === 'ADMIN';
   });
-
-  const isChangePasswordModalOpen = ref<boolean>(false);
 
   // aside 네비게이션 메뉴 아이템 정의
   const navItems: NavigationMenuItem[][] = [
@@ -186,6 +182,5 @@
         </template>
       </UFooter>
     </div>
-    <EditPasswordModal v-model:open="isChangePasswordModalOpen" :fetch-url="`/api/auth/password`" />
   </div>
 </template>
